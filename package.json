@@ -20,10 +20,12 @@
     "@nuxtjs/axios": "^5.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
     "babel-eslint": "^8.2.1",
     "eslint": "^5.0.1",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^4.0.0",
+    "node-sass": "^4.11.0",
+    "nodemon": "^1.11.0",
+    "sass-loader": "^7.1.0"
   }
 }
