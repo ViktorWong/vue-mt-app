@@ -179,11 +179,11 @@ router.get("/exit", async ctx => {
   await ctx.logout();
   if (!ctx.isAuthenticated()) {
     ctx.body = {
-      code: -1
+      code: 0
     };
   } else {
     ctx.body = {
-      code: 0
+      code: -1
     };
   }
 });

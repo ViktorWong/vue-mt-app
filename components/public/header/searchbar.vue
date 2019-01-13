@@ -29,7 +29,7 @@
           >
             <dt>热门搜索</dt>
             <dd
-              v-for="(item, index) in hotPlace"
+              v-for="(item, index) in $store.state.home.hotPlace.slice(0,5)"
               :key="index"
             >
               {{ item.name }}</dd>
@@ -41,12 +41,13 @@
             <dd
               v-for="(item,index) in searchList"
               :key="index"
+              @click="handleSearch(item.name)"
             >{{ item.name }}</dd>
           </dl>
         </div>
         <p class="suggest">
           <a
-            v-for="(item, index) in hotPlace"
+            v-for="(item, index) in $store.state.home.hotPlace"
             :key="index"
             href="#"
           >{{ item.name }}</a>
@@ -114,23 +115,17 @@ export default {
     return {
       search: "", //当前输入框的值
       isFocus: false, //是否聚焦
-      hotPlace: [
-        {
-          name: "中国的女的"
-        },
-        {
-          name: "中国的女的"
-        },
-        {
-          name: "中国的女的"
-        },
-        {
-          name: "中国的女的"
-        },
-        {
-          name: "中国的女的"
-        }
-      ], // 热门搜索数据
+      // hotPlace: [
+      //   {
+      //     name: "我是中国人，我爱我的祖国"
+      //   },
+      //   {
+      //     name: "我是中国人，我爱我的祖国"
+      //   },
+      //   {
+      //     name: "我是中国人，我爱我的祖国"
+      //   }
+      // ], // 热门搜索数据
       searchList: [
         {
           name: "搜索数据"
@@ -155,24 +150,25 @@ export default {
         this.isFocus = false;
       }, 200);
     },
-    input(e){
-      console.log(e)
-    }
-    // input: _.debounce(async function() {
-    //   let self = this;
-    //   let city = self.$store.state.geo.position.city.replace("市", "");
-    //   self.searchList = [];
-    //   let {
-    //     status,
-    //     data: { top }
-    //   } = await self.$axios.get("/search/top", {
-    //     params: {
-    //       input: self.search,
-    //       city
-    //     }
-    //   });
-    //   self.searchList = top.slice(0, 10);
-    // }, 300)
+    handleSearch(name) {
+      this.search = name;
+    },
+
+    input: _.debounce(async function() {
+      let self = this;
+      let city = self.$store.state.geo.position.city.replace("市", "");
+      self.searchList = [];
+      let {
+        status,
+        data: { top }
+      } = await self.$axios.get("/search/top", {
+        params: {
+          input: self.search,
+          city
+        }
+      });
+      self.searchList = top.slice(0, 10);
+    }, 300)
   }
 };
 </script>

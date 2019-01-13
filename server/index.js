@@ -9,6 +9,8 @@ const Redis = require("koa-redis");
 const json = require("koa-json");
 const dbConfig = require("./dbs/config");
 const users = require("./interface/users");
+const geo = require("./interface/geo");
+const search = require("./interface/search");
 const passport = require("./interface/utils/passport");
 
 const app = new Koa();
@@ -49,7 +51,8 @@ async function start() {
   }
 
   app.use(users.routes()).use(users.allowedMethods());
-  // app.use(users.routes(), users.allowedMethods());
+  app.use(geo.routes()).use(geo.allowedMethods());
+  app.use(search.routes()).use(search.allowedMethods());
 
   app.use(ctx => {
     ctx.status = 200; // koa defaults to 404 when it sees that status is unset

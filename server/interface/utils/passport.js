@@ -9,7 +9,7 @@ passport.use(
     };
     let result = await UserModel.findOne(where);
     if (result != null) {
-      if ((result.password = password)) {
+      if ((result.password === password)) {
         return done(null, result);
       } else {
         return done(null, false, "密码错误");

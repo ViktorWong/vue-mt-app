@@ -70,70 +70,46 @@ export default {
       return this.list[this.kind];
     }
   },
-  // async mounted() {
-  //   let {
-  //     status,
-  //     data: { count, pois }
-  //   } = await this.$axios.get("/search/resultsByKeywords", {
-  //     params: {
-  //       keyword: "景点",
-  //       city: this.$store.state.geo.position.city
-  //     }
-  //   });
-  //   if (status === 200 && count > 0) {
-  //     let r = pois
-  //       .filter(item => item.photos.length)
-  //       .map((item, index) => {
-  //         return {
-  //           title: item.name,
-  //           pos: item.type.split(";")[0],
-  //           price: item.biz_ext.cost || "暂无",
-  //           img: item.photos[0].url,
-  //           url: "//abc.com"
-  //         };
-  //       });
-  //     this.list[this.kind] = r.slice(0, 9);
-  //   } else {
-  //     this.list[this.kind] = [];
-  //   }
-  // },
+  mounted() {
+    this.getResultsByKeywords('景点')
+  },
   methods: {
-    mouseover: async function(e) {
+    mouseover:function(e) {
       let dom = e.target;
       let tag = dom.tagName.toLowerCase();
-      console.log(dom);
       if (tag === "dd") {
         this.kind = dom.getAttribute("kind");
         let keyword = dom.getAttribute("keyword");
+        this.getResultsByKeywords(keyword)
       }
-      // if (tag === 'dd') {
-      //   this.kind = dom.getAttribute('kind')
-      //   let keyword = dom.getAttribute('keyword')
+    },
 
-      //   let {status, data:{count, pois}} = await this.$axios.get('/search/resultsByKeywords', {
-      //     params: {
-      //       keyword,
-      //       city: this.$store.state.geo.position.city
-      //     }
-      //   })
-      //   if(status === 200 && count > 0) {
-      //     let r = pois.filter((item)=>item.photos.length).map((item, index)=>{
-      //       return {
-      //         title: item.name,
-      //         pos: item.type.split(';')[0],
-      //         price: item.biz_ext.cost || '暂无',
-      //         img: item.photos[0].url,
-      //         url: '//abc.com'
-      //       }
-      //     })
-      //     this.list[this.kind]=r.slice(0,9);
-      //   }
-      //   else
-      //   {
-      //     this.list[this.kind]= [];
-      //   }
-
-      // }
+    async getResultsByKeywords(keyword){
+      let {
+          status,
+          data: { count, pois }
+        } = await this.$axios.get("/search/resultsByKeywords", {
+          params: {
+            keyword,
+            city: this.$store.state.geo.position.city
+          }
+        });
+        if (status === 200 && count > 0) {
+          let r = pois
+            .filter(item => item.photos.length)
+            .map((item, index) => {
+              return {
+                title: item.name,
+                pos: item.type.split(";")[0],
+                price: item.biz_ext.cost || "暂无",
+                img: item.photos[0].url,
+                url: "//abc.com"
+              };
+            });
+          this.list[this.kind] = r.slice(0, 9);
+        } else {
+          this.list[this.kind] = [];
+        }
     }
   }
 };
